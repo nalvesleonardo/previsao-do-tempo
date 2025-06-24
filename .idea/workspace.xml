@@ -20,6 +20,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "nalvesleonardo"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/nalvesleonardo/previsao-do-tempo.git",
+    "accountId": "4856baf5-bd9a-4aac-b804-781daf5b975a"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
 }</component>
@@ -77,7 +89,7 @@
       <option name="presentableId" value="Default" />
       <updated>1750804062797</updated>
       <workItem from="1750804063969" duration="1843000" />
-      <workItem from="1750805978099" duration="2130000" />
+      <workItem from="1750805978099" duration="2208000" />
     </task>
     <servers />
   </component>
