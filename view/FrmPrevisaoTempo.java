@@ -18,15 +18,86 @@ public class FrmPrevisaoTempo extends JFrame {
     private JLabel lblCidade;
 
     public FrmPrevisaoTempo() {
-        super("Previsão do Tempo"); // Título da janela
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Define o que acontece ao fechar a janela
-        setSize(800, 650); // Tamanho inicial da janela
-        setLocationRelativeTo(null); // Centraliza a janela na tela
-
-        initUI(); // Chama o método para construir a interface
+        super("Previsão do Tempo");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(800, 650);
+        setLocationRelativeTo(null);
+        initMenu();
+        initUI();
     }
 
+    /**
+     * Método para inicializar a barra de menu da aplicação.
+     * Adiciona menus e itens de menu com ações básicas.
+     */
+    private void initMenu(){
+        // Barra de menu
+        JMenuBar menuBar = new JMenuBar();
+
+        // Menu Arquivo
+        JMenu menuArquivo = new JMenu("Arquivo");
+        JMenuItem itemDashboard = new JMenuItem("Dashboard");
+        JMenuItem itemSair = new JMenuItem("Sair");
+        menuArquivo.add(itemDashboard);
+        menuArquivo.add(itemSair);
+
+        // Menu Dados
+        JMenu menuDados = new JMenu("Dados");
+        JMenuItem itemAtualizar = new JMenuItem("Atualizar dados");
+        JMenuItem itemHistorico = new JMenuItem("Histórico");
+        menuDados.add(itemAtualizar);
+        menuDados.add(itemHistorico);
+
+        // Menu Configurações
+        JMenu menuConfiguracoes = new JMenu("Configurações");
+        JMenuItem itemPreferencias = new JMenuItem("Preferências");
+        menuConfiguracoes.add(itemPreferencias);
+
+        // Menu Ajuda
+        JMenu menuAjuda = new JMenu("Ajuda");
+        JMenuItem itemSobre = new JMenuItem("Sobre");
+        menuAjuda.add(itemSobre);
+
+        // Adiciona os menus à barra de menu
+        menuBar.add(menuArquivo);
+        menuBar.add(menuDados);
+        menuBar.add(menuConfiguracoes);
+        menuBar.add(menuAjuda);
+
+        // Define a barra de menu na janela
+        setJMenuBar(menuBar);
+
+        // Exemplo de ação para o item "Sair"
+        itemSair.addActionListener(e -> System.exit(0));
+
+        itemDashboard.addActionListener(e -> {
+            // Aqui você pode abrir a janela do dashboard, se implementada
+            JOptionPane.showMessageDialog(this, "Funcionalidade de Dashboard ainda não implementada.");
+        });
+
+        itemAtualizar.addActionListener(e -> {
+            // Aqui você pode implementar a lógica para atualizar os dados
+            JOptionPane.showMessageDialog(this, "Dados atualizados com sucesso!");
+        });
+
+        itemHistorico.addActionListener(e -> {
+            // Aqui você pode implementar a lógica para exibir o histórico
+            JOptionPane.showMessageDialog(this, "Histórico de dados ainda não implementado.");
+        });
+
+        itemPreferencias.addActionListener(e -> {
+            // Aqui você pode implementar a lógica para abrir as preferências
+            JOptionPane.showMessageDialog(this, "Preferências ainda não implementadas.");
+        });
+
+        itemSobre.addActionListener(e -> {
+            // Aqui você pode implementar a lógica para exibir informações sobre o aplicativo
+            JOptionPane.showMessageDialog(this, "Aplicativo de Previsão do Tempo - Versão 1.0");
+        });
+    }
     private void initUI() {
+
+
         // Define o layout principal da janela como BorderLayout
         setLayout(new BorderLayout(10, 10)); // 10px de espaçamento horizontal e vertical
 
@@ -38,10 +109,6 @@ public class FrmPrevisaoTempo extends JFrame {
         cmbCidade = new JComboBox<>();
         cmbCidade.setFont(new Font("Arial", Font.PLAIN, 14));
         pnlTopo.add(cmbCidade);
-
-        btnAtualizar = new JButton("Atualizar");
-        pnlTopo.add(btnAtualizar);
-
 
         // --- Painel Central (Onde os Widgets Vão Ficar) ---
         pnlMeio = new JPanel(new GridBagLayout()); // Usa GridBagLayout para flexibilidade
@@ -78,8 +145,6 @@ public class FrmPrevisaoTempo extends JFrame {
         gbc.gridx = 0; // Coluna 0
         gbc.gridy = 1; // Linha 1
         pnlMeio.add(pnlPrevisao, gbc);
-
-
     }
 
     /**
