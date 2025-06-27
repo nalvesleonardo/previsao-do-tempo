@@ -71,8 +71,8 @@ public class FrmPrevisaoTempo extends JFrame {
         itemSair.addActionListener(e -> System.exit(0));
 
         itemDashboard.addActionListener(e -> {
-            // Aqui você pode abrir a janela do dashboard, se implementada
-            JOptionPane.showMessageDialog(this, "Funcionalidade de Dashboard ainda não implementada.");
+
+
         });
 
         itemAtualizar.addActionListener(e -> {
