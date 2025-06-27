@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3ff3b791-a270-4cbe-a02a-e3850f285064" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/dal/DAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model/DadosDiarios.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model/DadosHorarios.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model/Localizacao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dal/Conexao.java" beforeDir="false" afterPath="$PROJECT_DIR$/dal/Conexao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/previsao-do-tempo/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/previsao-do-tempo/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/FrmPrevisaoTempo.java" beforeDir="false" afterPath="$PROJECT_DIR$/view/FrmPrevisaoTempo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +26,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -53,6 +62,7 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;dev&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/leona/Downloads/ModeloProva2&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -103,6 +113,12 @@
       <workItem from="1750808222000" duration="299000" />
       <workItem from="1750808709664" duration="176000" />
       <workItem from="1750809096478" duration="886000" />
+      <workItem from="1750872191156" duration="1188000" />
+      <workItem from="1750874318963" duration="50000" />
+      <workItem from="1750874406665" duration="71000" />
+      <workItem from="1750876752916" duration="299000" />
+      <workItem from="1751061908288" duration="708000" />
+      <workItem from="1751062660802" duration="638000" />
     </task>
     <servers />
   </component>
