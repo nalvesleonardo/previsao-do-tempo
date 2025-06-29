@@ -1,7 +1,12 @@
 package model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class PrevisaoResposta{
+    @SerializedName("current")
     private AtualAPI atual;
+
+    @SerializedName("daily")
     private DiarioAPI diario;
 
     // Getters e Setters
