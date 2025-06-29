@@ -14,7 +14,7 @@ public class OpenMeteoService {
      */
     public static String tempoAPI() throws Exception {
         // URL da API com coordenadas fixas e parâmetros para dados diários, horários e atuais
-        String apiUrl = "https://api.open-meteo.com/v1/forecast?latitude=-30.0392&longitude=-52.8939&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&hourly=temperature_2m,precipitation_probability,apparent_temperature&current=temperature_2m,precipitation,relative_humidity_2m,apparent_temperature&timezone=America%2FSao_Paulo";
+        String apiUrl = "https://api.open-meteo.com/v1/forecast?latitude=-30.0392,-30.0328,-29.7547&longitude=-52.8939,-51.2302,-57.0883&hourly=temperature_2m,precipitation_probability,apparent_temperature&timezone=America%2FSao_Paulo";
 
         URL url = new URL(apiUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();

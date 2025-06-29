@@ -16,15 +16,7 @@ public class Conexao {
         conexao = DriverManager.getConnection(url, usuario, senha);
     }
 
-    public Connection getConexao() {
-        return conexao;
-    }
-
     public PreparedStatement prepareStatement(String sql) throws SQLException {
         return conexao.prepareStatement(sql);
-    }
-
-    public void fechar() throws SQLException {
-        conexao.close();
     }
 }

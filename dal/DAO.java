@@ -15,7 +15,7 @@ public class DAO <T>{
         PreparedStatement st;
 
         if (obj instanceof Localizacao) {
-            sql += " localizacao (cidade, estado, latitude, longitude, data_hora) VALUES (?, ?, ?, ?)";
+            sql += " localizacao (cidade, latitude, longitude, data_hora) VALUES (?, ?, ?, ?)";
             Localizacao l = (Localizacao) obj; // fazer o cast
 
             st = conn.prepareStatement(sql);

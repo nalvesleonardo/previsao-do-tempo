@@ -1,12 +1,19 @@
-// Salve como model/Daily.java
 package model;
 
+import com.google.gson.annotations.SerializedName;
 
 public class DiarioAPI {
 
+    @SerializedName("time")
     private String[] tempo;
+
+    @SerializedName("temperature_2m_max")
     private double[] temperaturaMax;
+
+    @SerializedName("temperature_2m_min")
     private double[] temperaturaMin;
+
+    @SerializedName("precipitation_probability_max")
     private int[] precipitacaoMax;
 
     // Getters e Setters
