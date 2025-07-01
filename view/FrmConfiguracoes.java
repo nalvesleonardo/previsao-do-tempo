@@ -29,8 +29,8 @@ class FrmConfiguracoes extends JFrame {
     }
 
     private void initUI() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        JPanel pnl = new JPanel(new GridBagLayout());
+        pnl.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
 
@@ -39,14 +39,14 @@ class FrmConfiguracoes extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.EAST;
-        panel.add(lblApi, gbc);
+        pnl.add(lblApi, gbc);
 
         txtApiUrl = new JTextField(30);
         txtApiUrl.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
-        panel.add(txtApiUrl, gbc);
+        pnl.add(txtApiUrl, gbc);
 
         btnSalvar = new JButton("Salvar");
         btnSalvar.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -58,9 +58,9 @@ class FrmConfiguracoes extends JFrame {
         gbc.anchor = GridBagConstraints.EAST;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0;
-        panel.add(btnSalvar, gbc);
+        pnl.add(btnSalvar, gbc);
 
-        add(panel);
+        add(pnl);
 
         btnSalvar.addActionListener(e -> salvarConfiguracoes());
     }

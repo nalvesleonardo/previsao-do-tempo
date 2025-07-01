@@ -50,7 +50,7 @@ public class FrmSobre extends JFrame {
         panel.add(lblAutor3);
         panel.add(lblAutor4);
         panel.add(lblAutor5);
-        panel.add(Box.createVerticalGlue()); // Espaço flexível
+        panel.add(Box.createVerticalGlue());
 
         add(panel);
     }

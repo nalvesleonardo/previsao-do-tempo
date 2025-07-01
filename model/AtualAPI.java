@@ -1,3 +1,5 @@
+// metodo GET para a API de clima atual
+
 package model;
 
 import com.google.gson.annotations.SerializedName;

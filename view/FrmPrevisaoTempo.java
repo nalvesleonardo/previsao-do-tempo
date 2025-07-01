@@ -127,21 +127,22 @@ class FrmPrevisaoTempo extends JFrame {
     }
 
     private JPanel criarWidget(String titulo) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createCompoundBorder(
+        JPanel painel = new JPanel();
+        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
+        painel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(127, 140, 141)),
                 new EmptyBorder(15, 15, 15, 15)));
 
-        JLabel titleLabel = new JLabel("<html><font color='#2980b9'>" + titulo + "</font></html>");
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JLabel lblTitulo = new JLabel("<html><font color='#2980b9'>" + titulo + "</font></html>");
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        panel.add(titleLabel);
-        panel.add(Box.createVerticalStrut(10));
-        return panel;
+        painel.add(lblTitulo);
+        painel.add(Box.createVerticalStrut(10));
+        return painel;
     }
 
+    // carrega a combobox com as cidades do banco de dados
     private void carregarCidadesDoBanco() {
         try {
             DAO<Localizacao> dao = new DAO<>();
