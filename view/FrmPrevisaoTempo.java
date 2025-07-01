@@ -9,10 +9,12 @@ import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FrmPrevisaoTempo extends JFrame {
 
-    private JComboBox<String> cmbCidade;
+    private JComboBox<Localizacao> cmbCidade;
     private JLabel lblCidade;
     private JLabel lblHoraAtual;
     private JLabel lblTempoAtual;
@@ -21,13 +23,25 @@ public class FrmPrevisaoTempo extends JFrame {
     private JPanel pnlTopo;
     private JPanel pnlMeio;
 
+    private List<Localizacao> cidades;
+    private PrevisaoResposta previsaoAtual;
+
     public FrmPrevisaoTempo() {
         super("Previsão do Tempo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 650);
         setLocationRelativeTo(null);
+        initCidades();
         initMenu();
         initUI();
+    }
+
+    private void initCidades() {
+        cidades = new ArrayList<>();
+        // Adicione as cidades que você deseja
+        cidades.add(new Localizacao(1, "Porto Alegre", -30.0328, -51.2302, null));
+        cidades.add(new Localizacao(2, "Cacequi", -30.0392, -52.8939, null));
+        cidades.add(new Localizacao(3, "Uruguaiana", -29.7547, -57.0883, null));
     }
 
     private void initMenu() {
@@ -55,12 +69,15 @@ public class FrmPrevisaoTempo extends JFrame {
 
         pnlTopo = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         pnlTopo.setBorder(new EmptyBorder(10, 10, 5, 10));
-        pnlTopo.setBackground(new Color(44, 62, 80));
 
-        cmbCidade = new JComboBox<>();
+
+        cmbCidade = new JComboBox<>(cidades.toArray(new Localizacao[0]));
         cmbCidade.setFont(new Font("Arial", Font.PLAIN, 14));
         pnlTopo.add(new JLabel("Selecione a cidade:")); // Label adicionado para clareza
         pnlTopo.add(cmbCidade);
+
+        cmbCidade.addActionListener(e -> exibirDadosTempo());
+
 
         pnlMeio = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -70,7 +87,7 @@ public class FrmPrevisaoTempo extends JFrame {
         gbc.weighty = 1.0;
 
         JPanel pnlTempoAgora = criarWidget("Tempo Agora");
-        lblCidade = new JLabel("Local: [Atualize para ver]");
+        lblCidade = new JLabel("Local: [Selecione uma cidade e atualize]");
         lblHoraAtual = new JLabel("Data/Hora: [N/A]");
         lblTempoAtual = new JLabel("Temperatura: [N/A]");
         lblDescAtual = new JLabel("Umidade: [N/A]");
@@ -98,47 +115,58 @@ public class FrmPrevisaoTempo extends JFrame {
      */
     private void atualizarDadosTempo() {
         try {
+            Localizacao cidadeSelecionada = (Localizacao) cmbCidade.getSelectedItem();
+            if (cidadeSelecionada == null) {
+                JOptionPane.showMessageDialog(this, "Selecione uma cidade primeiro.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             // 1. Chamar a API para obter o JSON
-            String jsonResponse = OpenMeteoService.tempoAPI();
+            String jsonResponse = OpenMeteoService.tempoAPI(cidadeSelecionada.getLatitude(), cidadeSelecionada.getLongitude());
 
             // 2. Usar Gson para converter o JSON em objetos Java
             Gson gson = new Gson();
-            PrevisaoResposta previsao = gson.fromJson(jsonResponse, PrevisaoResposta.class);
+            previsaoAtual = gson.fromJson(jsonResponse, PrevisaoResposta.class);
 
-            // 3. Extrair os dados e atualizar a interface
-            if (previsao != null) {
-                // Atualiza o painel "Tempo Agora"
-                AtualAPI a = previsao.getAtual();
-                DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
+            exibirDadosTempo();
 
-                lblCidade.setText("Local: Cacequi, RS (-30.03, -52.89)"); // Local fixo, conforme API
-                lblHoraAtual.setText("Data/Hora: " + LocalDateTime.parse(a.getTempo()).format(formatter));
-                lblTempoAtual.setText(String.format("Temperatura: %.1f°C (Sensação: %.1f°C)", a.getTemperatura(), a.getSensacaoTermica()));
-                lblDescAtual.setText(String.format("Precipitação: %.1f mm", a.getPrecipitacao()));
-
-                // Atualiza o painel "Previsão Diária"
-                DiarioAPI d = previsao.getDiario();
-                StringBuilder previsaoHtml = new StringBuilder("<html>");
-                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM");
-                for (int i = 0; i < d.getTempo().length; i++) {
-                    String data = LocalDateTime.parse(d.getTempo()[i] + "T00:00:00").format(dateFormatter);
-                    previsaoHtml.append(String.format("<b>%s:</b> Min %.1f°C, Max %.1f°C, Chuva %d%%<br>",
-                            data,
-                            d.getTemperaturaMin()[i],
-                            d.getTemperaturaMax()[i],
-                            d.getPrecipitacaoMax()[i]));
-                }
-                previsaoHtml.append("</html>");
-                lblPrevisao.setText(previsaoHtml.toString());
-
-                JOptionPane.showMessageDialog(this, "Dados atualizados com sucesso!");
-            }
+            JOptionPane.showMessageDialog(this, "Dados atualizados com sucesso para " + cidadeSelecionada.getCidade() + "!");
 
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Erro ao buscar dados do tempo:\n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    private void exibirDadosTempo() {
+        Localizacao cidadeSelecionada = (Localizacao) cmbCidade.getSelectedItem();
+        if (previsaoAtual != null && cidadeSelecionada != null) {
+            // Atualiza o painel "Tempo Agora"
+            AtualAPI a = previsaoAtual.getAtual();
+            DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
+
+            lblCidade.setText(String.format("Local: %s (%.2f, %.2f)", cidadeSelecionada.getCidade(), cidadeSelecionada.getLatitude(), cidadeSelecionada.getLongitude()));
+            lblHoraAtual.setText("Data/Hora: " + LocalDateTime.parse(a.getTempo()).format(formatter));
+            lblTempoAtual.setText(String.format("Temperatura: %.1f°C (Sensação: %.1f°C)", a.getTemperatura(), a.getSensacaoTermica()));
+            lblDescAtual.setText(String.format("Precipitação: %.1f mm", a.getPrecipitacao()));
+
+            // Atualiza o painel "Previsão Diária"
+            DiarioAPI d = previsaoAtual.getDiario();
+            StringBuilder previsaoHtml = new StringBuilder("<html>");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM");
+            for (int i = 0; i < d.getTempo().length; i++) {
+                String data = LocalDateTime.parse(d.getTempo()[i] + "T00:00:00").format(dateFormatter);
+                previsaoHtml.append(String.format("<b>%s:</b> Min %.1f°C, Max %.1f°C, Chuva %d%%<br>",
+                        data,
+                        d.getTemperaturaMin()[i],
+                        d.getTemperaturaMax()[i],
+                        d.getPrecipitacaoMax()[i]));
+            }
+            previsaoHtml.append("</html>");
+            lblPrevisao.setText(previsaoHtml.toString());
+        }
+    }
+
 
     private JPanel criarWidget(String title) {
         JPanel panel = new JPanel();
