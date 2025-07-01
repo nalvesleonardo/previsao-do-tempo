@@ -106,4 +106,29 @@ public class DAO<T> {
 
         return st.executeQuery();
     }
+    // Método para buscar uma configuração específica
+    public String getConfiguracao(String chave) throws SQLException {
+        String sql = "SELECT valor FROM configuracoes WHERE chave = ?";
+        PreparedStatement st = conn.prepareStatement(sql);
+        st.setString(1, chave);
+        ResultSet rs = st.executeQuery();
+        if (rs.next()) {
+            return rs.getString("valor");
+        }
+        rs.close();
+        st.close();
+        return null; // Retorna null se a chave não for encontrada
+    }
+
+    // Método para salvar ou atualizar uma configuração
+    public void salvarConfiguracao(String chave, String valor) throws SQLException {
+        // Usa o comando "INSERT ... ON DUPLICATE KEY UPDATE" para inserir ou atualizar
+        String sql = "INSERT INTO configuracoes (chave, valor) VALUES (?, ?) ON DUPLICATE KEY UPDATE valor = ?";
+        PreparedStatement st = conn.prepareStatement(sql);
+        st.setString(1, chave);
+        st.setString(2, valor);
+        st.setString(3, valor); // Valor para o caso de UPDATE
+        st.executeUpdate();
+        st.close();
+    }
 }

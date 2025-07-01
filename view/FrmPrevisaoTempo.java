@@ -35,10 +35,6 @@ public class FrmPrevisaoTempo extends JFrame {
         initMenu();
         initUI();
 
-        if (cmbCidade.getItemCount() > 0) {
-            cmbCidade.setSelectedIndex(0);
-            atualizarDadosTempo();
-        }
     }
 
     private void carregarCidadesDoBanco() {
@@ -71,23 +67,32 @@ public class FrmPrevisaoTempo extends JFrame {
 
         JMenu menuDados = new JMenu("Dados");
         JMenuItem itemAtualizar = new JMenuItem("Atualizar dados");
-        menuDados.add(itemAtualizar);
-        itemAtualizar.addActionListener(e -> atualizarDadosTempo());
-
-
         JMenuItem itemHistorico = new JMenuItem("Ver Histórico");
+        menuDados.add(itemAtualizar);
         menuDados.add(itemHistorico);
-        itemHistorico.addActionListener(e -> {
-            FrmHistorico frmHistorico = new FrmHistorico();
-            frmHistorico.setVisible(true);
-        });
+
+        // --- NOVO MENU DE AJUDA ---
+        JMenu menuAjuda = new JMenu("Ajuda");
+        JMenuItem itemConfiguracoes = new JMenuItem("Configurações");
+        JMenuItem itemSobre = new JMenuItem("Sobre");
+        menuAjuda.add(itemConfiguracoes);
+        menuAjuda.add(itemSobre);
 
         menuBar.add(menuArquivo);
         menuBar.add(menuDados);
+        menuBar.add(menuAjuda); // Adiciona o novo menu à barra
         setJMenuBar(menuBar);
 
+        // --- AÇÕES DOS ITENS ---
         itemSair.addActionListener(e -> System.exit(0));
+        itemAtualizar.addActionListener(e -> atualizarDadosTempo());
+        itemHistorico.addActionListener(e -> new FrmHistorico().setVisible(true));
 
+        // Ação para abrir a tela de configurações
+        itemConfiguracoes.addActionListener(e -> new FrmConfiguracoes().setVisible(true));
+
+        // Ação para abrir a tela "Sobre"
+        itemSobre.addActionListener(e -> new FrmSobre().setVisible(true));
     }
 
     private void initUI() {

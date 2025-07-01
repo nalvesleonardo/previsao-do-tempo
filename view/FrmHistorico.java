@@ -23,7 +23,7 @@ public class FrmHistorico extends JFrame {
 
     public FrmHistorico() {
         super("Histórico de Previsões");
-        setSize(800, 600);
+        setSize(1000, 600);
         setLocationRelativeTo(null); // Centraliza a janela
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Fecha apenas esta janela
 
@@ -65,7 +65,7 @@ public class FrmHistorico extends JFrame {
         scrollPane.setBorder(BorderFactory.createTitledBorder("Resultados"));
 
         // Adiciona os painéis à janela
-        setLayout(new BorderLayout(5, 5));
+        setLayout(new BorderLayout(10, 10));
         add(pnlFiltros, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
 
