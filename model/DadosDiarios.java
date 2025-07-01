@@ -47,6 +47,13 @@ public class DadosDiarios {
         this.precipitacao = precipitacao;
     }
 
+    public DadosDiarios(String data, Double temperaturaMaxima, Double temperaturaMinima, Double precipitacao) {
+        this.data = data;
+        this.temperaturaMaxima = temperaturaMaxima;
+        this.temperaturaMinima = temperaturaMinima;
+        this.precipitacao = precipitacao;
+    }
+
     @Override
     public String toString() {
         return "DadosDiarios{" +
@@ -56,14 +63,6 @@ public class DadosDiarios {
                 ", temperaturaMinima=" + temperaturaMinima +
                 ", precipitacao=" + precipitacao +
                 '}';
-    }
-
-    public DadosDiarios(int id, String data, Double temperaturaMaxima, Double temperaturaMinima, Double precipitacao) {
-        this.id = id;
-        this.data = data;
-        this.temperaturaMaxima = temperaturaMaxima;
-        this.temperaturaMinima = temperaturaMinima;
-        this.precipitacao = precipitacao;
     }
 
 }

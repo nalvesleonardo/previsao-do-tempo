@@ -16,7 +16,7 @@ public class OpenMeteoService {
      * @throws Exception se ocorrer um erro ao fazer a requisição HTTP.
      */
     public static String tempoAPI(double latitude, double longitude) throws Exception {
-        // **A SOLUÇÃO ESTÁ AQUI:** Usamos Locale.US para garantir o ponto como separador decimal.
+        // Usamos Locale.US para garantir o ponto como separador decimal.
         String apiUrl = String.format(Locale.US, "https://api.open-meteo.com/v1/forecast?latitude=%.4f&longitude=%.4f&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&hourly=temperature_2m,precipitation_probability,apparent_temperature&current=temperature_2m,precipitation,relative_humidity_2m,apparent_temperature&timezone=America/Sao_Paulo", latitude, longitude);
 
         URL url = new URL(apiUrl);
@@ -44,7 +44,7 @@ public class OpenMeteoService {
             // Retorna a resposta completa como uma String JSON
             return response.toString();
         } else {
-            // **MELHORIA:** Lê a mensagem de erro detalhada da API.
+            // Lê a mensagem de erro detalhada da API.
             BufferedReader errorReader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
             String errorLine;
             StringBuilder errorResponse = new StringBuilder();

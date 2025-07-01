@@ -1,10 +1,10 @@
 package model;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class DadosHorarios {
     private int id;
-    private Date hora;
+    private LocalDateTime hora;
     private Double temperatura;
     private Double sensacaoTermica;
     private Double precipitacao;
@@ -18,11 +18,11 @@ public class DadosHorarios {
         this.id = id;
     }
 
-    public Date getHora() {
+    public LocalDateTime getHora() {
         return hora;
     }
 
-    public void setHora(Date hora) {
+    public void setHora(LocalDateTime hora) {
         this.hora = hora;
     }
 
@@ -58,13 +58,11 @@ public class DadosHorarios {
         this.umidade = umidade;
     }
 
-    public DadosHorarios(int id, Date hora, Double temperatura, Double sensacaoTermica, Double precipitacao, Double umidade) {
-        this.id = id;
+    public DadosHorarios(LocalDateTime hora, Double temperatura, Double sensacaoTermica, Double precipitacao) {
         this.hora = hora;
         this.temperatura = temperatura;
         this.sensacaoTermica = sensacaoTermica;
         this.precipitacao = precipitacao;
-        this.umidade = umidade;
     }
 
     @Override

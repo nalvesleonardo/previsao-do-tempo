@@ -2,14 +2,16 @@ package view;
 
 import com.google.gson.Gson;
 import model.*;
+import dal.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class FrmPrevisaoTempo extends JFrame {
@@ -23,7 +25,6 @@ public class FrmPrevisaoTempo extends JFrame {
     private JPanel pnlTopo;
     private JPanel pnlMeio;
 
-    private List<Localizacao> cidades;
     private PrevisaoResposta previsaoAtual;
 
     public FrmPrevisaoTempo() {
@@ -31,17 +32,35 @@ public class FrmPrevisaoTempo extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 650);
         setLocationRelativeTo(null);
-        initCidades();
         initMenu();
         initUI();
+
+        if (cmbCidade.getItemCount() > 0) {
+            cmbCidade.setSelectedIndex(0);
+            atualizarDadosTempo();
+        }
     }
 
-    private void initCidades() {
-        cidades = new ArrayList<>();
-        // Adicione as cidades que você deseja
-        cidades.add(new Localizacao(1, "Porto Alegre", -30.0328, -51.2302, null));
-        cidades.add(new Localizacao(2, "Cacequi", -30.0392, -52.8939, null));
-        cidades.add(new Localizacao(3, "Uruguaiana", -29.7547, -57.0883, null));
+    private void carregarCidadesDoBanco() {
+        try {
+            DAO<Localizacao> dao = new DAO<>();
+            List<Localizacao> cidades = dao.listarLocalizacoes(); //
+
+            // Limpa o ComboBox antes de adicionar novos itens
+            cmbCidade.removeAllItems();
+
+            // Adiciona as cidades carregadas ao ComboBox
+            for (Localizacao cidade : cidades) {
+                cmbCidade.addItem(cidade);
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "Erro ao carregar cidades do banco de dados:\n" + e.getMessage(),
+                    "Erro de Conexão",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void initMenu() {
@@ -71,12 +90,19 @@ public class FrmPrevisaoTempo extends JFrame {
         pnlTopo.setBorder(new EmptyBorder(10, 10, 5, 10));
 
 
-        cmbCidade = new JComboBox<>(cidades.toArray(new Localizacao[0]));
+        cmbCidade = new JComboBox<>();
         cmbCidade.setFont(new Font("Arial", Font.PLAIN, 14));
-        pnlTopo.add(new JLabel("Selecione a cidade:")); // Label adicionado para clareza
+        pnlTopo.add(new JLabel("Selecione a cidade:"));
         pnlTopo.add(cmbCidade);
 
-        cmbCidade.addActionListener(e -> exibirDadosTempo());
+        carregarCidadesDoBanco();
+
+        cmbCidade.addActionListener(e -> {
+            // Apenas atualiza se o evento for de seleção real e não de remoção de itens
+            if (e.getActionCommand().equals("comboBoxChanged") && cmbCidade.getSelectedItem() != null) {
+                atualizarDadosTempo();
+            }
+        });
 
 
         pnlMeio = new JPanel(new GridBagLayout());
@@ -129,6 +155,43 @@ public class FrmPrevisaoTempo extends JFrame {
             previsaoAtual = gson.fromJson(jsonResponse, PrevisaoResposta.class);
 
             exibirDadosTempo();
+
+            try {
+                DAO dao = new DAO();
+                int localizacaoId = cidadeSelecionada.getId();
+
+                // 1. Salva os dados atuais (horários)
+                AtualAPI a = previsaoAtual.getAtual();
+                DadosHorarios dadosAtuais = new DadosHorarios(
+                        LocalDateTime.parse(a.getTempo()),
+                        a.getTemperatura(),
+                        a.getSensacaoTermica(),
+                        a.getPrecipitacao()
+                );
+                dao.inserir(dadosAtuais, localizacaoId);
+
+                // 2. Salva os dados da previsão diária
+                DiarioAPI d = previsaoAtual.getDiario();
+                for (int i = 0; i < d.getTempo().length; i++) {
+                    DadosDiarios dadosDoDia = new DadosDiarios(
+                            d.getTempo()[i], // A data já está como String "yyyy-MM-dd"
+                            d.getTemperaturaMax()[i],
+                            d.getTemperaturaMin()[i],
+                            (double) d.getPrecipitacaoMax()[i] // A API devolve um int, o banco espera um double
+                    );
+                    dao.inserir(dadosDoDia, localizacaoId);
+                }
+
+                System.out.println("Dados salvos no banco para a cidade: " + cidadeSelecionada.getCidade());
+
+            } catch (Exception dbException) {
+                dbException.printStackTrace();
+                JOptionPane.showMessageDialog(this,
+                        "Erro ao salvar dados no banco:\n" + dbException.getMessage(),
+                        "Erro de Banco de Dados",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
 
             JOptionPane.showMessageDialog(this, "Dados atualizados com sucesso para " + cidadeSelecionada.getCidade() + "!");
 
