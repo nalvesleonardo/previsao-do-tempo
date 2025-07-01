@@ -21,7 +21,7 @@ class FrmPrevisaoTempo extends JFrame {
     private JLabel lblDescAtual;
     private JPanel pnlTopo;
     private JPanel pnlMeio;
-    private JPanel pnlPrevisaoGrid; // Painel para a previsão com GridLayout
+    private JPanel pnlPrevisaoGrid;
     private PrevisaoResposta previsaoAtual;
 
     public FrmPrevisaoTempo() {
@@ -110,16 +110,11 @@ class FrmPrevisaoTempo extends JFrame {
         gbc.gridy = 0;
         pnlMeio.add(pnlTempoAgora, gbc);
 
-        // -- Alteração Inicia Aqui --
         JPanel pnlPrevisaoWidget = criarWidget("Previsão Diária");
-
-        // Cria o painel que usará o GridLayout. O layout será definido dinamicamente.
         pnlPrevisaoGrid = new JPanel();
         pnlPrevisaoWidget.add(pnlPrevisaoGrid);
-
         gbc.gridy = 1;
         pnlMeio.add(pnlPrevisaoWidget, gbc);
-        // -- Alteração Termina Aqui --
 
         add(pnlTopo, BorderLayout.NORTH);
         add(pnlMeio, BorderLayout.CENTER);
@@ -212,12 +207,11 @@ class FrmPrevisaoTempo extends JFrame {
             lblTempoAtual.setText(String.format("Temperatura: %.1f°C (Sensação: %.1f°C)", a.getTemperatura(), a.getSensacaoTermica()));
             lblDescAtual.setText(String.format("Precipitação: %.1f mm", a.getPrecipitacao()));
 
-            // -- Alteração Inicia Aqui --
-            pnlPrevisaoGrid.removeAll(); // Limpa os componentes antigos
+            pnlPrevisaoGrid.removeAll();
 
             DiarioAPI d = previsaoAtual.getDiario();
             int numDias = d.getTempo().length;
-            pnlPrevisaoGrid.setLayout(new GridLayout(1, numDias, 10, 10)); // 1 linha, X colunas
+            pnlPrevisaoGrid.setLayout(new GridLayout(1, numDias, 10, 10));
 
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM");
 
@@ -256,10 +250,8 @@ class FrmPrevisaoTempo extends JFrame {
                 pnlPrevisaoGrid.add(pnlDia);
             }
 
-            // Atualiza a UI para mostrar os novos componentes
             pnlPrevisaoGrid.revalidate();
             pnlPrevisaoGrid.repaint();
-            // -- Alteração Termina Aqui --
         }
     }
 }

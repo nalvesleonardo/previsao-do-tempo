@@ -8,7 +8,6 @@ public class DadosHorarios {
     private Double temperatura;
     private Double sensacaoTermica;
     private Double precipitacao;
-    private Double umidade;
 
     public int getId() {
         return id;
@@ -65,7 +64,6 @@ public class DadosHorarios {
                 ", temperatura=" + temperatura +
                 ", sensacaoTermica=" + sensacaoTermica +
                 ", precipitacao=" + precipitacao +
-                ", umidade=" + umidade +
                 '}';
     }
 }

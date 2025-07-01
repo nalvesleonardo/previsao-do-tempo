@@ -9,7 +9,7 @@ public class PrevisaoResposta{
     @SerializedName("daily")
     private DiarioAPI diario;
 
-    // Getters e Setters
+
     public AtualAPI getAtual() {
         return atual;
     }

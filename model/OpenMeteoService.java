@@ -18,7 +18,6 @@ public class OpenMeteoService {
             throw new RuntimeException("URL base da API não encontrada nas configurações do banco de dados.");
         }
 
-        // Monta a URL completa usando a base do banco
         String parametros = String.format(Locale.US, "?latitude=%.4f&longitude=%.4f&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&hourly=temperature_2m,precipitation_probability,apparent_temperature&current=temperature_2m,precipitation,relative_humidity_2m,apparent_temperature&timezone=America/Sao_Paulo", latitude, longitude);
         String apiUrl = baseUrl + parametros;
 

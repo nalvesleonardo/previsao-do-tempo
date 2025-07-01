@@ -16,7 +16,6 @@ public class DiarioAPI {
     @SerializedName("precipitation_probability_max")
     private int[] precipitacaoMax;
 
-    // Getters e Setters
     public String[] getTempo() {
         return tempo;
     }

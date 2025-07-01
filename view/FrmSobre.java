@@ -23,7 +23,6 @@ public class FrmSobre extends JFrame {
         lblVersao.setFont(new Font("Arial", Font.PLAIN, 12));
         lblVersao.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Autores
         JLabel lblAutoresTitulo = new JLabel("Desenvolvido por:");
         lblAutoresTitulo.setFont(new Font("Arial", Font.BOLD, 14));
         lblAutoresTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
