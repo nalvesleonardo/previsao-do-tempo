@@ -131,4 +131,14 @@ public class DAO<T> {
         st.executeUpdate();
         st.close();
     }
+
+    public void inserirLocalizacao(Localizacao loc) throws SQLException {
+        String sql = "INSERT INTO localizacao (cidade, latitude, longitude) VALUES (?, ?, ?)";
+        PreparedStatement st = conn.prepareStatement(sql);
+        st.setString(1, loc.getCidade());
+        st.setDouble(2, loc.getLatitude());
+        st.setDouble(3, loc.getLongitude());
+        st.executeUpdate();
+        st.close();
+    }
 }

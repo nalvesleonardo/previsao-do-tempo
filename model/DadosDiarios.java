@@ -1,5 +1,3 @@
-// metodo GET para a API de clima diário
-
 package model;
 
 public class DadosDiarios {

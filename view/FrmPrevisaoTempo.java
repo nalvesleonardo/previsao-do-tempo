@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-
 import java.util.List;
 
 class FrmPrevisaoTempo extends JFrame {
@@ -20,16 +19,15 @@ class FrmPrevisaoTempo extends JFrame {
     private JLabel lblHoraAtual;
     private JLabel lblTempoAtual;
     private JLabel lblDescAtual;
-    private JLabel lblPrevisao;
     private JPanel pnlTopo;
     private JPanel pnlMeio;
+    private JPanel pnlPrevisaoGrid; // Painel para a previsão com GridLayout
     private PrevisaoResposta previsaoAtual;
 
     public FrmPrevisaoTempo() {
         super("Previsão do Tempo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(820, 700);
-        setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
         initMenu();
         initUI();
@@ -38,7 +36,9 @@ class FrmPrevisaoTempo extends JFrame {
     private void initMenu() {
         JMenuBar menuBar = new JMenuBar();
         JMenu menuArquivo = new JMenu("Arquivo");
+        JMenuItem itemAdicionarCidade = new JMenuItem("Adicionar Cidade");
         JMenuItem itemSair = new JMenuItem("Sair");
+        menuArquivo.add(itemAdicionarCidade);
         menuArquivo.add(itemSair);
 
         JMenu menuDados = new JMenu("Dados");
@@ -63,6 +63,7 @@ class FrmPrevisaoTempo extends JFrame {
         itemHistorico.addActionListener(e -> new FrmHistorico().setVisible(true));
         itemConfiguracoes.addActionListener(e -> new FrmConfiguracoes().setVisible(true));
         itemSobre.addActionListener(e -> new FrmSobre().setVisible(true));
+        itemAdicionarCidade.addActionListener(e -> new FrmAdicionarCidade().setVisible(true));
     }
 
     private void initUI() {
@@ -109,12 +110,16 @@ class FrmPrevisaoTempo extends JFrame {
         gbc.gridy = 0;
         pnlMeio.add(pnlTempoAgora, gbc);
 
-        JPanel pnlPrevisao = criarWidget("Previsão Diária");
-        lblPrevisao = criarLabelInfo("<html>Próximos dias: [Atualize para ver a previsão]</html>");
-        pnlPrevisao.add(lblPrevisao);
+        // -- Alteração Inicia Aqui --
+        JPanel pnlPrevisaoWidget = criarWidget("Previsão Diária");
+
+        // Cria o painel que usará o GridLayout. O layout será definido dinamicamente.
+        pnlPrevisaoGrid = new JPanel();
+        pnlPrevisaoWidget.add(pnlPrevisaoGrid);
 
         gbc.gridy = 1;
-        pnlMeio.add(pnlPrevisao, gbc);
+        pnlMeio.add(pnlPrevisaoWidget, gbc);
+        // -- Alteração Termina Aqui --
 
         add(pnlTopo, BorderLayout.NORTH);
         add(pnlMeio, BorderLayout.CENTER);
@@ -142,7 +147,6 @@ class FrmPrevisaoTempo extends JFrame {
         return painel;
     }
 
-    // carrega a combobox com as cidades do banco de dados
     private void carregarCidadesDoBanco() {
         try {
             DAO<Localizacao> dao = new DAO<>();
@@ -208,18 +212,54 @@ class FrmPrevisaoTempo extends JFrame {
             lblTempoAtual.setText(String.format("Temperatura: %.1f°C (Sensação: %.1f°C)", a.getTemperatura(), a.getSensacaoTermica()));
             lblDescAtual.setText(String.format("Precipitação: %.1f mm", a.getPrecipitacao()));
 
+            // -- Alteração Inicia Aqui --
+            pnlPrevisaoGrid.removeAll(); // Limpa os componentes antigos
+
             DiarioAPI d = previsaoAtual.getDiario();
-            StringBuilder previsaoHtml = new StringBuilder("<html>");
+            int numDias = d.getTempo().length;
+            pnlPrevisaoGrid.setLayout(new GridLayout(1, numDias, 10, 10)); // 1 linha, X colunas
+
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM");
 
-            for (int i = 0; i < d.getTempo().length; i++) {
-                String data = LocalDateTime.parse(d.getTempo()[i] + "T00:00:00").format(dateFormatter);
-                previsaoHtml.append(String.format("<b>%s:</b> Min %.1f°C, Max %.1f°C, Chuva %d%%<br>",
-                        data, d.getTemperaturaMin()[i], d.getTemperaturaMax()[i], d.getPrecipitacaoMax()[i]));
+            for (int i = 0; i < numDias; i++) {
+                JPanel pnlDia = new JPanel();
+                pnlDia.setLayout(new BoxLayout(pnlDia, BoxLayout.Y_AXIS));
+                pnlDia.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Color.LIGHT_GRAY),
+                        new EmptyBorder(10, 10, 10, 10)
+                ));
+                pnlDia.setBackground(Color.WHITE);
+
+                String dataFormatada = LocalDateTime.parse(d.getTempo()[i] + "T00:00:00").format(dateFormatter);
+                JLabel lblData = new JLabel(dataFormatada);
+                lblData.setFont(new Font("Segoe UI", Font.BOLD, 16));
+                lblData.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                JLabel lblMax = new JLabel(String.format("Max: %.1f°C", d.getTemperaturaMax()[i]));
+                lblMax.setForeground(new Color(211, 84, 0)); // Laranja
+                lblMax.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                JLabel lblMin = new JLabel(String.format("Min: %.1f°C", d.getTemperaturaMin()[i]));
+                lblMin.setForeground(new Color(41, 128, 185)); // Azul
+                lblMin.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                JLabel lblChuva = new JLabel(String.format("Chuva: %d%%", d.getPrecipitacaoMax()[i]));
+                lblChuva.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                pnlDia.add(lblData);
+                pnlDia.add(Box.createVerticalStrut(8));
+                pnlDia.add(lblMax);
+                pnlDia.add(lblMin);
+                pnlDia.add(Box.createVerticalStrut(5));
+                pnlDia.add(lblChuva);
+
+                pnlPrevisaoGrid.add(pnlDia);
             }
 
-            previsaoHtml.append("</html>");
-            lblPrevisao.setText(previsaoHtml.toString());
+            // Atualiza a UI para mostrar os novos componentes
+            pnlPrevisaoGrid.revalidate();
+            pnlPrevisaoGrid.repaint();
+            // -- Alteração Termina Aqui --
         }
     }
 }
