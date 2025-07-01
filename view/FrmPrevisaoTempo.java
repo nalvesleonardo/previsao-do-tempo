@@ -14,49 +14,25 @@ import java.time.format.FormatStyle;
 
 import java.util.List;
 
-public class FrmPrevisaoTempo extends JFrame {
-
+class FrmPrevisaoTempo extends JFrame {
     private JComboBox<Localizacao> cmbCidade;
     private JLabel lblCidade;
     private JLabel lblHoraAtual;
     private JLabel lblTempoAtual;
     private JLabel lblDescAtual;
-    private JLabel lblPrevisao; // Label para a previsão diária
+    private JLabel lblPrevisao;
     private JPanel pnlTopo;
     private JPanel pnlMeio;
-
     private PrevisaoResposta previsaoAtual;
 
     public FrmPrevisaoTempo() {
         super("Previsão do Tempo");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 650);
+        setSize(820, 700);
         setLocationRelativeTo(null);
+        setLayout(new BorderLayout(10, 10));
         initMenu();
         initUI();
-
-    }
-
-    private void carregarCidadesDoBanco() {
-        try {
-            DAO<Localizacao> dao = new DAO<>();
-            List<Localizacao> cidades = dao.listarLocalizacoes(); //
-
-            // Limpa o ComboBox antes de adicionar novos itens
-            cmbCidade.removeAllItems();
-
-            // Adiciona as cidades carregadas ao ComboBox
-            for (Localizacao cidade : cidades) {
-                cmbCidade.addItem(cidade);
-            }
-
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this,
-                    "Erro ao carregar cidades do banco de dados:\n" + e.getMessage(),
-                    "Erro de Conexão",
-                    JOptionPane.ERROR_MESSAGE);
-        }
     }
 
     private void initMenu() {
@@ -71,7 +47,6 @@ public class FrmPrevisaoTempo extends JFrame {
         menuDados.add(itemAtualizar);
         menuDados.add(itemHistorico);
 
-        // --- NOVO MENU DE AJUDA ---
         JMenu menuAjuda = new JMenu("Ajuda");
         JMenuItem itemConfiguracoes = new JMenuItem("Configurações");
         JMenuItem itemSobre = new JMenuItem("Sobre");
@@ -80,44 +55,39 @@ public class FrmPrevisaoTempo extends JFrame {
 
         menuBar.add(menuArquivo);
         menuBar.add(menuDados);
-        menuBar.add(menuAjuda); // Adiciona o novo menu à barra
+        menuBar.add(menuAjuda);
         setJMenuBar(menuBar);
 
-        // --- AÇÕES DOS ITENS ---
         itemSair.addActionListener(e -> System.exit(0));
         itemAtualizar.addActionListener(e -> atualizarDadosTempo());
         itemHistorico.addActionListener(e -> new FrmHistorico().setVisible(true));
-
-        // Ação para abrir a tela de configurações
         itemConfiguracoes.addActionListener(e -> new FrmConfiguracoes().setVisible(true));
-
-        // Ação para abrir a tela "Sobre"
         itemSobre.addActionListener(e -> new FrmSobre().setVisible(true));
     }
 
     private void initUI() {
-        setLayout(new BorderLayout(10, 10));
+        pnlTopo = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        pnlTopo.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        pnlTopo = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        pnlTopo.setBorder(new EmptyBorder(10, 10, 5, 10));
-
+        JLabel lblSelecionar = new JLabel("Selecione a cidade:");
+        lblSelecionar.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        pnlTopo.add(lblSelecionar);
 
         cmbCidade = new JComboBox<>();
-        cmbCidade.setFont(new Font("Arial", Font.PLAIN, 14));
-        pnlTopo.add(new JLabel("Selecione a cidade:"));
+        cmbCidade.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        cmbCidade.setPreferredSize(new Dimension(220, 25));
         pnlTopo.add(cmbCidade);
 
         carregarCidadesDoBanco();
 
         cmbCidade.addActionListener(e -> {
-            // Apenas atualiza se o evento for de seleção real e não de remoção de itens
             if (e.getActionCommand().equals("comboBoxChanged") && cmbCidade.getSelectedItem() != null) {
                 atualizarDadosTempo();
             }
         });
 
-
         pnlMeio = new JPanel(new GridBagLayout());
+        pnlMeio.setBorder(new EmptyBorder(10, 10, 10, 10));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.BOTH;
@@ -125,22 +95,24 @@ public class FrmPrevisaoTempo extends JFrame {
         gbc.weighty = 1.0;
 
         JPanel pnlTempoAgora = criarWidget("Tempo Agora");
-        lblCidade = new JLabel("Local: [Selecione uma cidade e atualize]");
-        lblHoraAtual = new JLabel("Data/Hora: [N/A]");
-        lblTempoAtual = new JLabel("Temperatura: [N/A]");
-        lblDescAtual = new JLabel("Umidade: [N/A]");
+        lblCidade = criarLabelInfo("Local: [Selecione uma cidade e atualize]");
+        lblHoraAtual = criarLabelInfo("Data/Hora: [N/A]");
+        lblTempoAtual = criarLabelInfo("Temperatura: [N/A]");
+        lblDescAtual = criarLabelInfo("Precipitação: [N/A]");
+
         pnlTempoAgora.add(lblCidade);
         pnlTempoAgora.add(lblHoraAtual);
         pnlTempoAgora.add(lblTempoAtual);
         pnlTempoAgora.add(lblDescAtual);
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         pnlMeio.add(pnlTempoAgora, gbc);
 
         JPanel pnlPrevisao = criarWidget("Previsão Diária");
-        lblPrevisao = new JLabel("<html>Próximos dias: [Atualize para ver a previsão]</html>");
+        lblPrevisao = criarLabelInfo("<html>Próximos dias: [Atualize para ver a previsão]</html>");
         pnlPrevisao.add(lblPrevisao);
-        gbc.gridx = 0;
+
         gbc.gridy = 1;
         pnlMeio.add(pnlPrevisao, gbc);
 
@@ -148,9 +120,41 @@ public class FrmPrevisaoTempo extends JFrame {
         add(pnlMeio, BorderLayout.CENTER);
     }
 
-    /**
-     * Método que chama a API, processa o JSON e atualiza a interface.
-     */
+    private JLabel criarLabelInfo(String texto) {
+        JLabel label = new JLabel(texto);
+        label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        return label;
+    }
+
+    private JPanel criarWidget(String titulo) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(127, 140, 141)),
+                new EmptyBorder(15, 15, 15, 15)));
+
+        JLabel titleLabel = new JLabel("<html><font color='#2980b9'>" + titulo + "</font></html>");
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        panel.add(titleLabel);
+        panel.add(Box.createVerticalStrut(10));
+        return panel;
+    }
+
+    private void carregarCidadesDoBanco() {
+        try {
+            DAO<Localizacao> dao = new DAO<>();
+            List<Localizacao> cidades = dao.listarLocalizacoes();
+            cmbCidade.removeAllItems();
+            for (Localizacao cidade : cidades) {
+                cmbCidade.addItem(cidade);
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar cidades do banco de dados:\n" + e.getMessage(), "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private void atualizarDadosTempo() {
         try {
             Localizacao cidadeSelecionada = (Localizacao) cmbCidade.getSelectedItem();
@@ -159,54 +163,34 @@ public class FrmPrevisaoTempo extends JFrame {
                 return;
             }
 
-            // 1. Chamar a API para obter o JSON
             String jsonResponse = OpenMeteoService.tempoAPI(cidadeSelecionada.getLatitude(), cidadeSelecionada.getLongitude());
-
-            // 2. Usar Gson para converter o JSON em objetos Java
             Gson gson = new Gson();
             previsaoAtual = gson.fromJson(jsonResponse, PrevisaoResposta.class);
-
             exibirDadosTempo();
 
             try {
                 DAO dao = new DAO();
                 int localizacaoId = cidadeSelecionada.getId();
-
-                // 1. Salva os dados atuais (horários)
                 AtualAPI a = previsaoAtual.getAtual();
-                DadosHorarios dadosAtuais = new DadosHorarios(
-                        LocalDateTime.parse(a.getTempo()),
-                        a.getTemperatura(),
-                        a.getSensacaoTermica(),
-                        a.getPrecipitacao()
-                );
+                DadosHorarios dadosAtuais = new DadosHorarios(LocalDateTime.parse(a.getTempo()), a.getTemperatura(), a.getSensacaoTermica(), a.getPrecipitacao());
                 dao.inserir(dadosAtuais, localizacaoId);
 
-                // 2. Salva os dados da previsão diária
                 DiarioAPI d = previsaoAtual.getDiario();
                 for (int i = 0; i < d.getTempo().length; i++) {
                     DadosDiarios dadosDoDia = new DadosDiarios(
-                            d.getTempo()[i], // A data já está como String "yyyy-MM-dd"
+                            d.getTempo()[i],
                             d.getTemperaturaMax()[i],
                             d.getTemperaturaMin()[i],
-                            (double) d.getPrecipitacaoMax()[i] // A API devolve um int, o banco espera um double
+                            (double) d.getPrecipitacaoMax()[i]
                     );
                     dao.inserir(dadosDoDia, localizacaoId);
                 }
-
-                System.out.println("Dados salvos no banco para a cidade: " + cidadeSelecionada.getCidade());
-
-            } catch (Exception dbException) {
-                dbException.printStackTrace();
-                JOptionPane.showMessageDialog(this,
-                        "Erro ao salvar dados no banco:\n" + dbException.getMessage(),
-                        "Erro de Banco de Dados",
-                        JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Erro ao salvar dados no banco:\n" + ex.getMessage(), "Erro de Banco de Dados", JOptionPane.ERROR_MESSAGE);
             }
 
-
             JOptionPane.showMessageDialog(this, "Dados atualizados com sucesso para " + cidadeSelecionada.getCidade() + "!");
-
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Erro ao buscar dados do tempo:\n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -216,45 +200,25 @@ public class FrmPrevisaoTempo extends JFrame {
     private void exibirDadosTempo() {
         Localizacao cidadeSelecionada = (Localizacao) cmbCidade.getSelectedItem();
         if (previsaoAtual != null && cidadeSelecionada != null) {
-            // Atualiza o painel "Tempo Agora"
             AtualAPI a = previsaoAtual.getAtual();
             DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
-
             lblCidade.setText(String.format("Local: %s (%.2f, %.2f)", cidadeSelecionada.getCidade(), cidadeSelecionada.getLatitude(), cidadeSelecionada.getLongitude()));
             lblHoraAtual.setText("Data/Hora: " + LocalDateTime.parse(a.getTempo()).format(formatter));
             lblTempoAtual.setText(String.format("Temperatura: %.1f°C (Sensação: %.1f°C)", a.getTemperatura(), a.getSensacaoTermica()));
             lblDescAtual.setText(String.format("Precipitação: %.1f mm", a.getPrecipitacao()));
 
-            // Atualiza o painel "Previsão Diária"
             DiarioAPI d = previsaoAtual.getDiario();
             StringBuilder previsaoHtml = new StringBuilder("<html>");
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM");
+
             for (int i = 0; i < d.getTempo().length; i++) {
                 String data = LocalDateTime.parse(d.getTempo()[i] + "T00:00:00").format(dateFormatter);
                 previsaoHtml.append(String.format("<b>%s:</b> Min %.1f°C, Max %.1f°C, Chuva %d%%<br>",
-                        data,
-                        d.getTemperaturaMin()[i],
-                        d.getTemperaturaMax()[i],
-                        d.getPrecipitacaoMax()[i]));
+                        data, d.getTemperaturaMin()[i], d.getTemperaturaMax()[i], d.getPrecipitacaoMax()[i]));
             }
+
             previsaoHtml.append("</html>");
             lblPrevisao.setText(previsaoHtml.toString());
         }
-    }
-
-
-    private JPanel criarWidget(String title) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(127, 140, 141), 1),
-                new EmptyBorder(15, 15, 15, 15)
-        ));
-        JLabel titleLabel = new JLabel("<html><font color='#e67e22'>" + title + "</font></html>");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(titleLabel);
-        panel.add(Box.createVerticalStrut(10));
-        return panel;
     }
 }

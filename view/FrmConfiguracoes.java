@@ -5,17 +5,17 @@ import dal.DAO;
 import javax.swing.*;
 import java.awt.*;
 
-public class FrmConfiguracoes extends JFrame {
-
+class FrmConfiguracoes extends JFrame {
     private JTextField txtApiUrl;
     private JButton btnSalvar;
     private DAO dao;
 
     public FrmConfiguracoes() {
         super("Configurações");
-        setSize(500, 150);
+        setSize(520, 180);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         try {
             dao = new DAO();
@@ -30,29 +30,34 @@ public class FrmConfiguracoes extends JFrame {
 
     private void initUI() {
         JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(8, 8, 8, 8);
 
-        // Label
+        JLabel lblApi = new JLabel("URL Base da API:");
+        lblApi.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         gbc.gridx = 0;
         gbc.gridy = 0;
-        panel.add(new JLabel("URL Base da API:"), gbc);
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(lblApi, gbc);
 
-        // Campo de Texto
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         txtApiUrl = new JTextField(30);
+        txtApiUrl.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        gbc.gridx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
         panel.add(txtApiUrl, gbc);
 
-        // Botão Salvar
+        btnSalvar = new JButton("Salvar");
+        btnSalvar.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnSalvar.setBackground(new Color(52, 152, 219));
+        btnSalvar.setForeground(Color.WHITE);
+        btnSalvar.setFocusPainted(false);
         gbc.gridx = 1;
         gbc.gridy = 1;
-        gbc.weightx = 0;
-        gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.EAST;
-        btnSalvar = new JButton("Salvar");
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0;
         panel.add(btnSalvar, gbc);
 
         add(panel);
@@ -73,7 +78,7 @@ public class FrmConfiguracoes extends JFrame {
         try {
             dao.salvarConfiguracao("API_BASE_URL", txtApiUrl.getText());
             JOptionPane.showMessageDialog(this, "Configurações salvas com sucesso!");
-            this.dispose(); // Fecha a janela após salvar
+            dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao salvar configurações: " + e.getMessage());
         }
