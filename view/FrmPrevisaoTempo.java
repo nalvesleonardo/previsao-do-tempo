@@ -72,6 +72,15 @@ public class FrmPrevisaoTempo extends JFrame {
         JMenu menuDados = new JMenu("Dados");
         JMenuItem itemAtualizar = new JMenuItem("Atualizar dados");
         menuDados.add(itemAtualizar);
+        itemAtualizar.addActionListener(e -> atualizarDadosTempo());
+
+
+        JMenuItem itemHistorico = new JMenuItem("Ver Histórico");
+        menuDados.add(itemHistorico);
+        itemHistorico.addActionListener(e -> {
+            FrmHistorico frmHistorico = new FrmHistorico();
+            frmHistorico.setVisible(true);
+        });
 
         menuBar.add(menuArquivo);
         menuBar.add(menuDados);
@@ -79,8 +88,6 @@ public class FrmPrevisaoTempo extends JFrame {
 
         itemSair.addActionListener(e -> System.exit(0));
 
-        // Ação para atualizar os dados do tempo
-        itemAtualizar.addActionListener(e -> atualizarDadosTempo());
     }
 
     private void initUI() {

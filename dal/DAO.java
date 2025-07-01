@@ -7,6 +7,8 @@ import model.Localizacao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.ResultSet;
+
 
 public class DAO<T> {
     private Conexao conn;
@@ -68,5 +70,40 @@ public class DAO<T> {
         rs.close();
         st.close();
         return lista;
+    }
+
+    public ResultSet listarHistoricoPorData(int idLocalizacao, String dataInicio, String dataFim) throws SQLException {
+        // Uma consulta SQL que une as tabelas para buscar dados relevantes
+        String sql = "SELECT " +
+                "h.horario AS 'Data e Hora', " +
+                "h.temperatura AS 'Temperatura (C)', " +
+                "h.sensacao_termica AS 'Sensação (C)', " +
+                "d.temperatura_max AS 'Máxima Dia (C)', " +
+                "d.temperatura_min AS 'Mínima Dia (C)' " +
+                "FROM dados_horarios h " +
+                "JOIN dados_diarios d ON h.id_localizacao = d.id_localizacao AND DATE(h.horario) = d.data " +
+                "WHERE h.id_localizacao = ? ";
+
+        // Adiciona filtros de data se eles forem fornecidos
+        if (dataInicio != null && !dataInicio.trim().isEmpty()) {
+            sql += " AND DATE(h.horario) >= ? ";
+        }
+        if (dataFim != null && !dataFim.trim().isEmpty()) {
+            sql += " AND DATE(h.horario) <= ? ";
+        }
+        sql += " ORDER BY h.horario DESC"; // Ordena pelos mais recentes
+
+        PreparedStatement st = conn.prepareStatement(sql);
+        int paramIndex = 1;
+        st.setInt(paramIndex++, idLocalizacao);
+
+        if (dataInicio != null && !dataInicio.trim().isEmpty()) {
+            st.setString(paramIndex++, dataInicio);
+        }
+        if (dataFim != null && !dataFim.trim().isEmpty()) {
+            st.setString(paramIndex++, dataFim);
+        }
+
+        return st.executeQuery();
     }
 }
