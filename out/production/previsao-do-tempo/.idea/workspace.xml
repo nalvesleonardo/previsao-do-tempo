@@ -5,17 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3ff3b791-a270-4cbe-a02a-e3850f285064" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/previsao-do-tempo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/previsao-do-tempo.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/view/FrmConfiguracoes.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/view/FrmSobre.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dal/Conexao.java" beforeDir="false" afterPath="$PROJECT_DIR$/dal/Conexao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dal/DAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/dal/DAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/OpenMeteoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/OpenMeteoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/previsao-do-tempo/.idea/previsao-do-tempo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/previsao-do-tempo/.idea/previsao-do-tempo.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/previsao-do-tempo/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/previsao-do-tempo/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/previsao-do-tempo/dal/Conexao.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/previsao-do-tempo/dal/Conexao.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/previsao-do-tempo/dal/DAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/previsao-do-tempo/dal/DAO.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/previsao-do-tempo/model/OpenMeteoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/previsao-do-tempo/model/OpenMeteoService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/previsao-do-tempo/view/FrmHistorico.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/previsao-do-tempo/view/FrmHistorico.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/previsao-do-tempo/view/FrmPrevisaoTempo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/previsao-do-tempo/view/FrmPrevisaoTempo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/script sql/script tables previsao tempo.sql" beforeDir="false" afterPath="$PROJECT_DIR$/script sql/script tables previsao tempo.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/FrmHistorico.java" beforeDir="false" afterPath="$PROJECT_DIR$/view/FrmHistorico.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/view/FrmPrevisaoTempo.java" beforeDir="false" afterPath="$PROJECT_DIR$/view/FrmPrevisaoTempo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -135,6 +135,7 @@
       <workItem from="1751395401567" duration="226000" />
       <workItem from="1751395671413" duration="514000" />
       <workItem from="1751396217652" duration="227000" />
+      <workItem from="1751396463075" duration="6174000" />
     </task>
     <servers />
   </component>

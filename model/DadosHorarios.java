@@ -50,14 +50,6 @@ public class DadosHorarios {
         this.precipitacao = precipitacao;
     }
 
-    public Double getUmidade() {
-        return umidade;
-    }
-
-    public void setUmidade(Double umidade) {
-        this.umidade = umidade;
-    }
-
     public DadosHorarios(LocalDateTime hora, Double temperatura, Double sensacaoTermica, Double precipitacao) {
         this.hora = hora;
         this.temperatura = temperatura;
