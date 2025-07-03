@@ -1,5 +1,3 @@
-// view/FrmAdicionarCidade.java
-
 package view;
 
 import dal.DAO;
@@ -40,7 +38,7 @@ public class FrmAdicionarCidade extends JFrame {
         add(txtLongitude);
 
         btnSalvar = new JButton("Salvar");
-        add(new JLabel()); // Espaço em branco
+        add(new JLabel());
         add(btnSalvar);
 
         btnSalvar.addActionListener(e -> salvarCidade());
@@ -56,7 +54,7 @@ public class FrmAdicionarCidade extends JFrame {
             dao.inserirLocalizacao(novaCidade);
 
             JOptionPane.showMessageDialog(this, "Cidade adicionada com sucesso!");
-            dispose(); // Fecha a janela após salvar
+            dispose();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Erro ao salvar a cidade: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
