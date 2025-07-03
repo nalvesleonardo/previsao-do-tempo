@@ -1,6 +1,6 @@
 package model;
 
-import dal.DAO; // Importe o DAO
+import dal.DAO;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -11,7 +11,6 @@ import java.util.Locale;
 public class OpenMeteoService {
 
     public static String tempoAPI(double latitude, double longitude) throws Exception {
-        // --- BUSCA A URL BASE DO BANCO DE DADOS ---
         DAO dao = new DAO();
         String baseUrl = dao.getConfiguracao("API_BASE_URL");
         if (baseUrl == null || baseUrl.isEmpty()) {

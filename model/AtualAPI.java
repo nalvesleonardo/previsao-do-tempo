@@ -16,7 +16,6 @@ public class AtualAPI {
     @SerializedName("precipitation")
     private double precipitacao;
 
-    // Getters e Setters
     public String getTempo() {
         return tempo;
     }
